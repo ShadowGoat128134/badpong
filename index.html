@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>2D Breakout</title>
+	<style>
+		* { padding: 0; margin: 0; }
+		canvas { background: #eee; display: block; margin: 0 auto; }
+	</style>
+</head>
+<body>
+<canvas id="myCanvas" width="960" height="640"></canvas>
+<script>
+var validation = prompt("Difficulty?", "Determines Ball Speed");
+var canvas = document.getElementById("myCanvas");
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+var ballRadius = 10;
+var x = canvas.width/2;
+var y = canvas.height-30;
+var dx = validation;
+var dy = -validation;
+var paddleWidth = 10;
+var paddleHeight = 75;
+var paddleY = (canvas.Height-paddleWidth)/2;
+var downPressed = false;
+var upPressed = false;
+var brickRowCount = 11;
+var brickColumnCount = 8;
+var brickWidth = 75;
+var brickHeight = 20;
+var brickPadding = 10;
+var brickOffsetTop = 30;
+var brickOffsetLeft = 15;
+var friendlyScore = 0;
+var badScore = 0;
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
+
+function keyDownHandler(e) {
+    if(e.key == "Up" || e.key == "ArrowUp") {
+        upPressed = true;
+    }
+    else if(e.key == "Down" || e.key == "ArrowDown") {
+        downPressed = true;
+    }
+}
+
+function keyUpHandler(e) {
+    if(e.key == "Up" || e.key == "ArrowUp") {
+        UpPressed = false;
+    }
+    else if(e.key == "Down" || e.key == "ArrowDown") {
+        downPressed = false;
+    }
+}
+
+function mouseMoveHandler(e) {
+  var relativeY = e.clientY - canvas.offsetUp;
+  if(relativeY > 0 && relativeY < canvas.Height) {
+    paddleY = relativeY - paddleHeight/2;
+  }
+}
+function drawBall() {
+  ctx.beginPath();
+  ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+  ctx.fillStyle = "#0095DD";
+  ctx.fill();
+  ctx.closePath();
+}
+function drawPaddle() {
+  ctx.beginPath();
+  ctx.rect(paddleX, canvas.Width-paddleWidth, paddleHeight, paddleWidth);
+  ctx.fillStyle = "#0095DD";
+  ctx.fill();
+  ctx.closePath();
+}
+  
+function drawFriendlyScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Score: "+score, 8, 20);
+}
+function drawBadScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Score: "+score, 8, 20);
+}
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBall();
+  drawPaddle();
+  drawScore();
+
+  if(y + dy > canvas.width-ballRadius || y + dy < ballRadius) {
+    dy = -dy;
+  }
+  if(x + dx < ballRadius) {
+    badScore++;
+    if(badScore == 5){
+            alert("GAME OVER");
+        document.location.reload();
+    }
+  else if(y + dy > canvas.height-ballRadius) {
+    if(x > paddleX - 3 && x < paddleX + paddleWidth + 3) {
+      dy = -dy;
+    }
+    else {
+      lives--;
+	dy = -dy;
+	setTimeout(10);
+	alert("You lost a life.")
+      if(!lives) {
+        alert("GAME OVER");
+        document.location.reload();
+      }
+      else {
+        x = canvas.width/2;
+        y = canvas.height/2;
+        paddleX = (canvas.width-paddleWidth)/2;
+      }
+    }
+  }
+
+  if(rightPressed && paddleX < canvas.width-paddleWidth) {
+    paddleX += 7;
+  }
+  else if(leftPressed && paddleY > 0) {
+    paddleX -= 7;
+  }
+
+  x += dx;
+  y += dy;
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>
