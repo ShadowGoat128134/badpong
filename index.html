@@ -94,32 +94,27 @@ function draw() {
   drawPaddle();
   drawScore();
 
-  if(y + dy > canvas.width-ballRadius || y + dy < ballRadius) {
+  if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
     dy = -dy;
   }
   if(x + dx < ballRadius) {
     badScore++;
     if(badScore == 5){
-            alert("GAME OVER");
+            alert("You lose!");
         document.location.reload();
     }
-  else if(y + dy > canvas.height-ballRadius) {
-    if(x > paddleX - 3 && x < paddleX + paddleWidth + 3) {
-      dy = -dy;
-    }
-    else {
-      lives--;
-	dy = -dy;
-	setTimeout(10);
-	alert("You lost a life.")
-      if(!lives) {
-        alert("GAME OVER");
+  else if(x + dx > canvas.width-ballRadius) {
+	friendlyScore++;
+	  if(friendlyScore == 5){
+		 alert("You win!");
         document.location.reload();
-      }
-      else {
+	  }
+	else {
+	alert("Resetting!");
         x = canvas.width/2;
         y = canvas.height/2;
-        paddleX = (canvas.width-paddleWidth)/2;
+      }
+    else {
       }
     }
   }
